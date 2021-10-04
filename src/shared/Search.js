@@ -1,3 +1,5 @@
+// test
+
 import React from "react";
 //언더바에 debounce 와 throttle 이 들어있음.
 import _ from "lodash";
@@ -17,7 +19,7 @@ const Search = () => {
         console.log("throttle :::", e.target.value)
     }, 1000)
 
-    
+
     //[]안의 어떤것이 변할때만, 이 함수를 초기화 한다
     const keyPress = React.useCallback(debounce, [text])
     // const debounce = _.debounce((value) => {console.log(value);}, 1000)
