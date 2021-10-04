@@ -2,19 +2,19 @@ import styled from "styled-components";
 import React from "react";
 
 const Image = (props) => {
-    const {shape, src, size} = props;
+    const { shape, src, size } = props;
     const styles = {
         src: src,
         size: size,
     }
 
-    if(shape === "circle"){
+    if (shape === "circle") {
         return (
             <ImageCircle {...styles}></ImageCircle>
         )
     }
 
-    if(shape === "rectangle"){
+    if (shape === "rectangle") {
         return (
             <AspectOutter>
                 <AspectInner {...styles}></AspectInner>
@@ -22,10 +22,11 @@ const Image = (props) => {
         )
     }
 
+
+
     return (
         <React.Fragment>
-
-        
+            <ImageDefault {...styles}></ImageDefault>
         </React.Fragment>
     )
 }
@@ -35,6 +36,15 @@ Image.defaultProps = {
     src: "https://imymemine-dictionary.s3.ap-northeast-2.amazonaws.com/huff.jpeg",
     size: 36,
 };
+
+const ImageDefault = styled.div`
+    --size: ${(props) => props.size}px;
+    width: var(--size);
+    height: var(--size);
+    background-image: url("${(props) => props.src}");
+    // 원에 딱 맞추는게 커버
+    background-size: cover;
+`;
 
 const AspectOutter = styled.div`
     width: 100%;

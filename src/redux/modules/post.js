@@ -10,10 +10,11 @@ import { actionCreators as imageActions } from "./image";
 
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
+const EDIT_POST = "EDIT_POST"
 
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
-
+const editPost = createAction(EDIT_POST, (post_id, post) => ({ post_id, post }));
 
 
 const initialState = {
@@ -32,6 +33,59 @@ const initialPost = {
     //지금 오늘 날짜를 문자열로 나오게 함
     insert_dt: moment().format("YYYY-MM-DD hh:mm:ss")
     // insert_dt: "2021-09-30 10:00:00",
+}
+
+const editPostFB = (post_id = null, post = {}) => {
+    return function (dispatch, getState, {history}){
+
+        if(!post_id){
+            console.log('게시물정보가 없습니다');
+            return;
+        }
+        const _image = getState().image.preview;
+
+        const _post_idx = getState().post.list.findIndex(p => p.id === post_id);
+        const _post = getState().post.list[_post_idx];
+
+        console.log(_post)
+
+        const postDB = firestore.collection("post");
+
+        if(_image === _post.image_url){
+            postDB.doc(post_id).update(post).then(doc => {
+                dispatch(editPost(post_id, {...post}));
+                history.replace("/");
+            });
+
+            return;
+        }else{
+            const user_id = getState().user.user.uid;
+            const _upload = storage
+            .ref(`images/${user_id}_${new Date().getTime()}`).putString(_image, "data_url")
+
+        //스냅샷으로 올린 이미지의 url을 확인
+        _upload.then(snapshop => {
+            snapshop.ref.getDownloadURL().then(url => {
+                console.log(url);
+
+                return url;
+            }).then(url => {
+                postDB
+                .doc(post_id)
+                .update({...post, image_url:url})
+                .then(doc => {
+                    dispatch(editPost(post_id, {...post, image_url: url}));
+                    history.replace("/");
+                });
+                    
+                
+            }).catch((error) => {
+                window.alert("이미지 업로드 실패실패");
+                console.log("이미지 업로드 실패", error);
+            })
+        });
+        }
+    }
 }
 
 
@@ -158,6 +212,13 @@ export default handleActions(
             //원래 unshift를 쓸때는 불변성 고려를 해야하지만 immer로 불변성에 대한 리스크헤징이 되어있는 상태로 판단하고 진행.
             draft.list.unshift(action.payload.post);
         }),
+
+        [EDIT_POST]: (state, action) => produce(state, (draft) => {
+            // 맞는 조건의 인덱스 번호를 주는 findIndex
+            let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
+            //여기서 스프레드를 쓴 이유, if 문으로 이미지가 있냐없냐 를 판별하는것 보다 이게 간편함
+            draft.list[idx] = {...draft.list[idx], ...action.payload.post};
+        })
     }, initialState
 );
 
@@ -166,6 +227,7 @@ const actionCreators = {
     addPost,
     getPostFB,
     addPostFB,
+    editPostFB,
 }
 
 export { actionCreators };
