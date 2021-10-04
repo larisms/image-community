@@ -1,0 +1,45 @@
+import React from "react";
+// import Grid from "../elements/Grid";
+// import Image from "../elements/Image";
+// import Text from "../elements/Text";
+
+import {Grid, Image, Text} from "../elements/index"
+
+const Post = (props) => {
+
+    return (
+        <React.Fragment>
+            <Grid>
+                <Grid is_flex >
+                    <Image shape="circle" src={props.src}/>
+                    <Text bold>{props.user_info.user_name} </Text>
+                    <Text>{props.insert_dt}</Text>
+                </Grid>
+                <Grid padding="16px">
+                    <Text>{props.contents}</Text>
+                </Grid>
+                <Grid>
+                    <Image shape="rectangle" src={props.image_url}/>
+                </Grid>
+                <Grid padding="16px">
+                    <Text margin="0px" bold>댓글{props.comment_cnt}개</Text>
+                </Grid>
+            </Grid>
+        </React.Fragment>
+    )
+}
+
+//기본적으로 필요한 프롭스들을 미리 넘겨놓기, 프롭스가 없어서 오류가 난다거나 화면이 깨지는 상황은 없음. (다만 잘못가져오는것에 대한 방어가 약함)
+Post.defaultProps = {
+    user_info: {
+        nick: "young",
+        user_profile: "https://imymemine-dictionary.s3.ap-northeast-2.amazonaws.com/huff.jpeg",
+    },
+    image_url: "https://imymemine-dictionary.s3.ap-northeast-2.amazonaws.com/huff.jpeg",
+    contents: "hufflepuff",
+    comment_cnt: 10,
+    insert_dt: "2021-09-30 10:00:00",
+
+};
+
+export default Post;
