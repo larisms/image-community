@@ -58,7 +58,7 @@ function App() {
         <Button is_float text="+" _onClick={() => {history.push("/write")}}></Button>
       </Permit>
     </React.Fragment>
-  );
+  )
 }
 
 export default App;

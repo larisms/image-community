@@ -7,14 +7,16 @@ import { Grid, Image, Text, Button } from "../elements/index"
 import { history } from "../redux/configureStore";
 
 const Post = (props) => {
-    console.log("aaa", props.id)
+    // console.log("aaa", props.id)
+    // console.log("nick", props.user_info)
+    // console.log("props", props)
     return (
         <React.Fragment>
             <Grid>
                 <Grid is_flex padding="16px">
                     <Grid is_flex width="auto">
                         <Image shape="circle" src={props.src} />
-                        <Text bold>{props.user_info.nick} </Text>
+                        <Text bold>{props.user_info.user_nick} </Text>
                     </Grid>
                     <Grid is_flex width="auto">
                         <Text>{props.insert_dt}</Text>
@@ -41,7 +43,7 @@ const Post = (props) => {
 //기본적으로 필요한 프롭스들을 미리 넘겨놓기, 프롭스가 없어서 오류가 난다거나 화면이 깨지는 상황은 없음. (다만 잘못가져오는것에 대한 방어가 약함)
 Post.defaultProps = {
     user_info: {
-        nick: "young",
+        user_nick: "young",
         user_profile: "https://imymemine-dictionary.s3.ap-northeast-2.amazonaws.com/huff.jpeg",
     },
     image_url: "https://imymemine-dictionary.s3.ap-northeast-2.amazonaws.com/huff.jpeg",

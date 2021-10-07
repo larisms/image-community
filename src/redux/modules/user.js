@@ -25,9 +25,9 @@ const initialState = {
     is_login: false,
 };
 
-const user_initial = {
-    user_name: 'young',
-}
+// const user_initial = {
+//     user_name: 'young',
+// }
 
 
 //middleware actions
@@ -40,7 +40,7 @@ const loginFB = (id, pwd) => {
                     .signInWithEmailAndPassword(id, pwd)
                     .then((user) => {
                         console.log(user);
-                        dispatch(setUser({ nick: user.user.displayName, id: id, user_profile: '', uid: user.user.uid }));
+                        dispatch(setUser({ user_nick: user.user.displayName, id: id, user_profile: '', uid: user.user.uid }));
                         history.push("/");
                         // Signed in
                         // ...
@@ -62,7 +62,7 @@ const loginFB = (id, pwd) => {
 //     };
 // };
 
-const signupFB = (id, pwd, nick) => {
+const signupFB = (id, pwd, user_nick) => {
     return function (dispatch, getState, { history }) {
         auth
             .createUserWithEmailAndPassword(id, pwd)
@@ -71,9 +71,9 @@ const signupFB = (id, pwd, nick) => {
                 console.log(user);
 
                 auth.currentUser.updateProfile({
-                    displayName: nick,
+                    displayName: user_nick,
                 }).then(() => {
-                    dispatch(setUser({ nick: nick, id: id, user_profile: '', uid:user.user.uid }));
+                    dispatch(setUser({ user_nick: user_nick, id: id, user_profile: '', uid:user.user.uid }));
                     history.push('/')
                 }).catch((error => {
                     console.log(error);
@@ -95,7 +95,7 @@ const loginCheckFB = () => {
         auth.onAuthStateChanged((user) => {
             if(user){
                 dispatch(setUser({
-                    nick: user.displayName,
+                    user_nick: user.displayName,
                     user_profile: "",
                     id: user.email,
                     uid: user.uid,
