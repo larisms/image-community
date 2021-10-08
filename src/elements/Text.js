@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Text = (props) => {
 
-    const {bold, color, size, children, margin} = props;
+    const {bold, color, size, children, margin, _onClick} = props;
     const styles = {
         bold: bold,
         color: color,
@@ -12,7 +12,7 @@ const Text = (props) => {
     };
 
     return (
-        <P {...styles}>
+        <P {...styles} onClick={_onClick}>
             {children}
         </P>
     )
@@ -23,7 +23,8 @@ Text.defaultProps = {
     bold: false,
     color: '#222831',
     size: '14px',
-    margin: false
+    margin: false,
+    _onClick: () => {}
 }
 
 const P = styled.p`

@@ -51,6 +51,10 @@ const PostWrite = (props) => {
         dispatch(postActions.editPostFB(post_id, {contents: contents}));
     }
 
+    const deletePost = () => {
+        dispatch(postActions.deletePostFB(post_id));   
+    }
+
     if (!is_login){
         return (
             <Grid margin="100px 0px" padding="16px" center>
@@ -64,8 +68,10 @@ const PostWrite = (props) => {
     return (
         <React.Fragment>
             <Grid padding="16px">
-                <Text margin="0px" size="36px" bold>{is_edit? "게시글 수정" : "게시글 작성"}</Text>
+                <Text margin="10px auto 20px auto" size="30px" bold>{is_edit? "게시글 수정" : "게시글 작성"}</Text>
+                <hr/>
                 <Upload></Upload>
+                <hr/>
             </Grid>
             <Grid>
                 <Grid padding="16px">
@@ -79,10 +85,16 @@ const PostWrite = (props) => {
             </Grid>
             <Grid padding="16px">
                 {is_edit? (
-                    <Button text="게시글 수정" _onClick = {editPost}></Button>
+                    <Button border="solid 1px #212121" text="게시글 수정" _onClick = {editPost}></Button>
                 ) : (
-                    <Button text="게시글 작성" _onClick = {addPost}></Button>
+                    <Button border="solid 1px #212121" text="게시글 작성" _onClick = {addPost}></Button>
                 )}
+                {is_edit? (
+                    <Button border="solid 1px #212121" text="게시글 삭제" _onClick = {deletePost} margin="5px 0px"></Button>
+                ) : (
+                    ""
+                )}
+                
                 
             </Grid>
         </React.Fragment>

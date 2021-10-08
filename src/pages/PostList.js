@@ -24,7 +24,7 @@ const PostList = (props) => {
     }, []);
     return (
         <React.Fragment>
-            <Grid bg={"#EFF6FF"} padding="20px 0px">
+            <Grid bg={"#ececec"} padding="10px 0px">
                 {/* <Post/> */}
                 <InfinityScroll
                     callNext={() => {

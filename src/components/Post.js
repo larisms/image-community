@@ -13,7 +13,7 @@ const Post = (props) => {
     return (
         <React.Fragment>
             <Grid>
-                <Grid is_flex padding="16px">
+                <Grid is_flex margin="6px 0px" padding="16px">
                     <Grid is_flex width="auto">
                         <Image shape="circle" src={props.src} />
                         <Text bold>{props.user_info.user_nick} </Text>
@@ -23,7 +23,7 @@ const Post = (props) => {
                         {/* 프롭스에 is_me가 있는 경우에만 버튼을 보여준다 */}
                         {props.is_me && <Button width="auto" margin="4px" padding="4px" _onClick={() => {
                             history.push(`/write/${props.id}`);
-                        }}>crystal</Button>}
+                        }}>수정하기</Button>}
                     </Grid>
                 </Grid>
                 <Grid padding="16px">

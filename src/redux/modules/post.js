@@ -2,6 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import produce, { produde } from "immer";
 import { deleteCookie } from "../../shared/Cookie";
 import { firestore, storage } from "../../shared/firebase";
+import {doc, deleteDoc} from "firebase/firestore";
 import "moment";
 import moment from "moment";
 
@@ -11,12 +12,14 @@ import { actionCreators as imageActions } from "./image";
 
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
-const EDIT_POST = "EDIT_POST"
+const EDIT_POST = "EDIT_POST";
+const DELETE_POST = "DELETE_POST";
 const LOADING = "LOADING";
 
 const setPost = createAction(SET_POST, (post_list, paging) => ({ post_list, paging }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 const editPost = createAction(EDIT_POST, (post_id, post) => ({ post_id, post }));
+const deletePost = createAction(DELETE_POST, (post_id) => ({post_id}))
 const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
 
 
@@ -277,6 +280,48 @@ const getPostFB = (start = null, size = 3) => {
     }
 };
 
+export const deletePostFB = (post_id) => {
+    // return function (dispatch, getState, {history}) {
+    //     const postDB = firestore.collection("post");
+
+    //     if(!post_id){
+    //         window.alert("삭제할 수 없는 게시글입니다")
+    //         return;
+    //     }
+    //     postDB
+    //     .doc(post_id)
+    //     .delete()
+    //     .then((doc) => {
+    //         dispatch(deletePost(post_id));
+    //         history.replace("/")
+    //     })
+    //     .catch((err) => {
+    //         console.log("삭제실패",err);
+    //     })
+    // }
+
+
+    return async function(dispatch, getState, {history}){
+        const docRef = await doc(firestore, "post", post_id);
+        console.log("docRef", docRef)
+        await deleteDoc(docRef);
+
+        dispatch(deletePost(post_id));
+        window.alert("삭제되었습니다");
+        history.replace("/");
+
+        // const postDB = firestore.collection("post");
+        // console.log("delete", postDB)
+        // postDB
+        // .doc(d_id).get().delete().then(doc => {
+        //     console.log("doc", doc);
+        //     console.log("docid", doc.id);
+            
+        //     dispatch(deletePost(d_id));
+        // })
+    }
+}
+
 
 const getOnePostFB = (id) => {
     return function(dispatch, getState, {history}){
@@ -340,6 +385,19 @@ export default handleActions(
             draft.list[idx] = { ...draft.list[idx], ...action.payload.post };
         }),
 
+        [DELETE_POST]: (state, action) => produce(state, (draft) => {
+            let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
+
+            if (idx !== -1) {
+                draft.list.splice(idx, 1);
+            }
+            // draft.list.filter((d_id) => {
+            //     let p_id = action.payload.post_id;
+            //     return p_id !== d_id;
+            // });
+            
+        }),
+
         [LOADING]: (state, action) => produce(state, (draft) => {
             draft.is_loading = action.payload.is_loading;
         }),
@@ -353,6 +411,7 @@ const actionCreators = {
     getPostFB,
     addPostFB,
     editPostFB,
+    deletePostFB,
     getOnePostFB,
 }
 
